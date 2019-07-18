@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Script for dumping MySQL databases
+# by seeseekey (https://seeseekey.net)
+# licensed under MIT license
+
 TIMESTAMP=$(date +"%F")
 BACKUP_DIR="/backup/$TIMESTAMP"
 MYSQL_USER="backup"
