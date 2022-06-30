@@ -21,8 +21,8 @@ $sourceMailboxes["spam@example.org"]["passwort"] = "secret";
 // $targetMailbox = "{mail.example.org:110/imap/ssl}";
 
 $targetMailbox = "{mail.example.org/ssl/novalidate-cert}";
-$targetUsername = "user";
-$targetPassword = "secret";
+$targetMailboxUsername = "user";
+$targetMailboxPassword = "secret";
 
 // Operate
 $mboxTarget = imap_open($targetMailboxServer, $targetMailboxUsername, $targetMailboxPassword) or die ("Failed with error: " . imap_last_error());
