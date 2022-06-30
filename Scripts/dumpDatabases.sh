@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script for dumping MySQL databases
+# Script for dumping MySQL/MariaDB databases
 # by seeseekey (https://seeseekey.net)
 # licensed under MIT license
 
