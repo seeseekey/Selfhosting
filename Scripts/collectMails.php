@@ -5,6 +5,7 @@
 
 // Configuration
 // Mailboxes to collect
+// Source mailboxes
 $sourceMailboxes["test@example.org"]["server"] = "{mail.example.org/novalidate-cert}INBOX";
 $sourceMailboxes["test@example.org"]["username"] = "user";
 $sourceMailboxes["test@example.org"]["passwort"] = "secret";
@@ -23,25 +24,36 @@ $targetMailbox = "{mail.example.org/ssl/novalidate-cert}";
 $targetUsername = "user";
 $targetPassword = "secret";
 
-// Open target mailbox
-$mboxTarget = imap_open($targetMailbox, $targetUsername, $targetPassword) or die("Failed with error: " . imap_last_error());
+// Operate
+$mboxTarget = imap_open($targetMailboxServer, $targetMailboxUsername, $targetMailboxPassword) or die ("Failed with error: " . imap_last_error());
 
 // Open source mailboxes
-while (list($key, $value) = each($sourceMailboxes)) {
+foreach ($sourceMailboxes as $key => $value) {
 
-    $mboxSource = imap_open($value["server"], $value["username"], $value["passwort"]) or die("Failed with error: " . imap_last_error());
-    $mailboxInformation = imap_check($mboxSource);
-    $overviewSourceMailBox = imap_fetch_overview($mboxSource, "1:{$mailboxInformation->Nmsgs}", 0);
+    // Open source mailbox
+    $mboxSource = imap_open($value["server"], $value["username"], $value["passwort"]) or die ("Failed with error: " . imap_last_error());
+    $mboxSourceInformation = imap_check($mboxSource);
 
-    // Create folder on target mailbox
-    imap_createmailbox($mboxTarget, imap_utf7_encode("$targetMailbox$key"));
+    if ($mboxSourceInformation->Nmsgs == 0) {
+        imap_close($mboxSource);
+        continue;
+    }
 
-    foreach ($overviewSourceMailBox as $overview) {
+    $mboxSourceOverview = imap_fetch_overview($mboxSource, "1:{$mboxSourceInformation->Nmsgs}", 0);
+
+    // Create target folder, if needed
+    $mboxTargetMailboxes = imap_list($mboxTarget, $targetMailboxServer, "*");
+
+    if (!in_array("$targetMailboxServer$key", $mboxTargetMailboxes)) {
+        imap_createmailbox($mboxTarget, imap_utf7_encode("$targetMailboxServer$key"));
+    }
+
+    foreach ($mboxSourceOverview as $overview) {
+
         $message = imap_fetchheader($mboxSource, $overview->msgno) . imap_body($mboxSource, $overview->msgno);
 
-        // Store mail into target mailbox
-        if (!imap_append($mboxTarget, mb_convert_encoding("$targetMailbox$key" . "" . "", "UTF7-IMAP", "ISO-8859-1"), $message, "")) {
-            die("Error: " . imap_last_error());
+        if (!imap_append($mboxTarget, mb_convert_encoding("$targetMailboxServer$key", "UTF7-IMAP", "ISO-8859-1"), $message, "")) {
+            die ("Error: " . imap_last_error());
         }
 
         // Mark mail from source mailbox as deleted
@@ -53,5 +65,5 @@ while (list($key, $value) = each($sourceMailboxes)) {
     imap_close($mboxSource);
 }
 
-// Close connection to target mailbox
 imap_close($mboxTarget);
+?>
