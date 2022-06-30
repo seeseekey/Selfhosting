@@ -16,11 +16,11 @@ $sourceMailboxes["spam@example.org"]["passwort"] = "secret";
 
 // Target mailbox
 
-// $targetMailbox = "{pop3.example.com:110/pop3}INBOX";
-// $targetMailbox = "{mail.example.org:110/imap/ssl}INBOX";
-// $targetMailbox = "{mail.example.org:110/imap/ssl}";
+// $$targetMailboxServer = "{pop3.example.com:110/pop3}INBOX";
+// $$targetMailboxServer = "{mail.example.org:110/imap/ssl}INBOX";
+// $$targetMailboxServer = "{mail.example.org:110/imap/ssl}";
 
-$targetMailbox = "{mail.example.org/ssl/novalidate-cert}";
+$targetMailboxServer = "{mail.example.org/ssl/novalidate-cert}";
 $targetMailboxUsername = "user";
 $targetMailboxPassword = "secret";
 
