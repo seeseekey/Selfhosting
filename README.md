@@ -1,3 +1,3 @@
 # Selfhosting
 
-Skript-Repository für das Buch Selfhosting (https://seeseekey.net/fachbuecher/selfhosting/).
+Begleitendes Skript-Repository zum Buch „Selfhosting“ (https://seeseekey.net/fachbuecher/selfhosting/).
